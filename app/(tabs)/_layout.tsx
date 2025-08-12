@@ -1,45 +1,58 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { View, StyleSheet } from "react-native";
 
 export default function TabLayout() {
   return (
-    <Tabs>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Home",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="CameraScreen"
-        options={{
-          title: "Camera",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="camera-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="FriendScreen"
-        options={{
-          title: "Friends",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="people-outline" size={size} color={color} />
-          ),
-        }}
-      />
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: { backgroundColor: "black", height: 70 },
+        tabBarActiveTintColor: "red",
+        tabBarInactiveTintColor: "white",
+      }}
+    >
       <Tabs.Screen
         name="MapScreen"
         options={{
-          title: "Map",
+          title: "",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="map-outline" size={size} color={color} />
+            <Ionicons name="location-outline" size={28} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="PanicScreen"
+        options={{
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <View style={styles.panicButton}>
+              <Ionicons name="alert" size={28} color="white" />
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="FriendsScreen"
+        options={{
+          title: "",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="people-outline" size={28} color={color} />
           ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  panicButton: {
+    backgroundColor: "red",
+    borderRadius: 35,
+    width: 60,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+});

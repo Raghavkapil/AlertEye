@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "safety-app",
-    "slug": "safety-app",
+    "name": "AlertEye",
+    "slug": "AlertEye",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -12,12 +12,17 @@
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
-    },
+  "adaptiveIcon": {
+    "foregroundImage": "./assets/images/adaptive-icon.png",
+    "backgroundColor": "#ffffff"
+  },
+  "edgeToEdgeEnabled": true,
+  "permissions": [
+    "ACCESS_COARSE_LOCATION",
+    "ACCESS_FINE_LOCATION"
+  ],
+  "package": "com.anonymous.AlertEye"
+},
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -32,6 +37,12 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
       ]
     ],
