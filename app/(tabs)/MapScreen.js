@@ -58,8 +58,8 @@ export default function MapScreen() {
       showsUserLocation={true}
       followsUserLocation={true}
       initialRegion={{
-        latitude: location?.latitude || 37.78825, // fallback to SF
-        longitude: location?.longitude || -122.4324,
+        latitude: location?.latitude, // fallback to SF
+        longitude: location?.longitude,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       }}
@@ -70,6 +70,6 @@ export default function MapScreen() {
 }
 
 const styles = StyleSheet.create({
-  map: { flex: 1 },
+  map: { flex: 1, marginTop: 40 },
   center: { flex: 1, justifyContent: "center", alignItems: "center" },
 });

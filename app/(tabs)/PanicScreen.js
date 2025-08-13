@@ -1,50 +1,47 @@
 import React, { useState } from "react";
-import { View, Text, Button, StyleSheet, Alert, ActivityIndicator } from "react-native";
+import { View, Text, Button, StyleSheet, ActivityIndicator, Alert } from "react-native";
 import * as Location from "expo-location";
+import Constants from "expo-constants";
 
 export default function PanicScreen() {
   const [loading, setLoading] = useState(false);
+  const API_URL = Constants.expoConfig.extra.API_URL; // From app.json
 
-  const handlePanicPress = async () => {
+  const handlePanic = async () => {
+    setLoading(true);
+
     try {
-      setLoading(true);
-
-      // Request location permission
+      // Ask for location permissions
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        Alert.alert("Permission Denied", "Location permission is required to send alert.");
+        Alert.alert("Permission denied", "Location permission is required.");
         setLoading(false);
         return;
       }
 
       // Get current location
-      let loc = await Location.getCurrentPositionAsync({});
-      console.log("📍 Location:", loc.coords);
+      let location = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = location.coords;
 
-      // Replace with actual logged-in user ID
-      const payload = {
-        userId: "USER_123",
-        latitude: loc.coords.latitude,
-        longitude: loc.coords.longitude
-      };
-
-      // Send to backend
-      const response = await fetch("http://<YOUR_LOCAL_IP>:5000/api/incidents", {
+      // Send panic alert to backend
+      const response = await fetch(`${API_URL}/api/incidents`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          userId: "testUser", // Replace with real logged-in user ID
+          latitude,
+          longitude,
+        }),
       });
 
-      const result = await response.json();
-
-      if (response.ok) {
-        Alert.alert("🚨 Panic Alert Sent!", `Time: ${new Date().toLocaleString()}`);
-      } else {
-        Alert.alert("Error", result.message || "Failed to send alert");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      Alert.alert("Panic Sent", "Your location has been shared successfully.");
     } catch (error) {
-      console.error(error);
-      Alert.alert("Error", "Something went wrong while sending alert");
+      console.error("Error sending panic alert:", error);
+      Alert.alert("Error", "Could not send panic alert.");
     } finally {
       setLoading(false);
     }
@@ -52,17 +49,22 @@ export default function PanicScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Panic Button</Text>
       {loading ? (
-        <ActivityIndicator size="large" color="red" />
+        <>
+          <ActivityIndicator size="large" color="red" />
+          <Text>Sending panic alert...</Text>
+        </>
       ) : (
-        <Button title="🚨 Send Panic Alert" color="red" onPress={handlePanicPress} />
+        <Button title="🚨 Panic Button" color="red" onPress={handlePanic} />
       )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
-  title: { fontSize: 22, fontWeight: "bold", marginBottom: 20 }
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
