@@ -3,6 +3,17 @@ import Incident from "../models/Incident.js";
 
 const router = express.Router();
 
+// GET: Fetch all incidents
+router.get("/", async (req, res) => {
+  try {
+    const incidents = await Incident.find().sort({ timestamp: -1 });
+    res.json(incidents);
+  } catch (error) {
+    console.error("Error fetching incidents:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 // POST: Log new incident
 router.post("/", async (req, res) => {
   try {
